@@ -1,0 +1,42 @@
+1. Il Bignami dei Concetti (Da rileggere prima dell'Open Day)
+
+    Socket = Il Tubo (o il Telefono). È il collegamento fisico. Non sa cosa trasporta, sa solo che collega A con B. Noi usiamo questa per avere il controllo totale.
+
+    HTTP = Il Messaggio. È quello che urliamo dentro il tubo. Se usiamo il browser fa tutto lui, ma noi vogliamo farlo a mano per essere più veloci e "cattivi".
+
+        Formula magica: GET / HTTP/1.1 (Dammi la home, parlo versione 1.1).
+
+    Thread = I Cloni. Il programma principale è il "Capo". I thread sono i "Cloni" che manda a lavorare.
+
+        Daemon: Sono cloni kamikaze. Se il Capo muore (chiudi il programma), muoiono anche loro all'istante.
+
+    DoS (Denial of Service) = L'Ingorgo. Non stiamo hackerando password. Stiamo creando una coda così lunga alla cassa del supermercato (il server) che nessuno riesce più a pagare.
+
+        Il trucco: Il server è threaded=False (una sola cassa aperta) e lento (time.sleep).
+
+2. Per la condivisione del file
+
+    Il server runna dove c'è flask, di base conviene ti costruisci un venv con le librerie 
+    Mentre i client hanno bisogno solo di librerie standard e quindi basta che eseguano il file.
+
+    Metodo 1: La via "Hacker" (Consigliatissimo)
+
+    Invece di far andare 20 ragazzini su GitHub, usa il tuo PC come File Server temporaneo. È velocissimo e molto educativo.
+    Assicurati che il tuo PC e quelli del laboratorio siano sulla stessa rete Wi-Fi/LAN (lo sono per forza se devi fare l'attacco).
+    Apri il terminale nella cartella dove hai il file
+    Scrivi questo comando magico (è integrato in Python):
+
+    Bash
+        python -m http.server 8000  
+    Ora il tuo PC sta servendo i file della cartella sulla porta 8000.
+
+Cosa fanno i ragazzi:
+    Aprono il browser (Chrome/Edge).
+    Scrivono nella barra degli indirizzi il TUO IP seguito da :8000.
+        Esempio: 192.168.1.15:8000
+    Vedranno un elenco di file. Cliccano su attacco_studenti.py e lo scaricano.
+    Lo salvano sul Desktop e lo lanciano.
+Vantaggi:
+    Non serve internet, basta la rete locale.
+    Non devono digitare URL lunghi di GitHub.
+    Fa molto "condivisione pirata", i ragazzini impazziranno.
