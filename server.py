@@ -3,6 +3,8 @@ Sever creato con flask e con socket per la simulazione di attacco dos
 Il server gestisce tutto in single-threading così che l'attacco dos avvenga, altrimenti le architetture dei server standard gestirebbero tranquillamente tutte le richieste
 '''
 
+
+'''
 from flask import Flask, render_template_string, request
 import time
 import socket
@@ -90,4 +92,76 @@ if __name__=="__main__":
     print("-- SERVER AVVIATO -- ")
     print(f"Host: {hostname} \n INDIRIZZO IP: {local_ip}")
     app.run('0.0.0.0', threaded=False) # lo mettiamo visibile sulla LAN e impostiamo il threaded a FALSE -> che e FONDAMENTALE per rendere il server "stupido" :P
+'''
 
+from flask import Flask, render_template_string, request
+import time
+import socket
+
+app = Flask(__name__)
+
+# --- CONFIGURAZIONE ---
+# Variabile globale per attivare/disattivare la modalità "Server Rotto"
+SERVER_STRESSATO = False 
+
+hostname = socket.gethostname()
+local_ip = socket.gethostbyname(hostname)
+
+HTML_PAGE = """
+<!DOCTYPE html>
+<html>
+<head><title>Scuola Pascal</title></head>
+<body style="font-family: sans-serif; text-align: center; padding: 50px;">
+    <h1>ITT BLAISE PASCAL</h1>
+    <div style="background: #d4edda; padding: 20px; border-radius: 10px; display: inline-block;">
+        ✅ STATO SERVER: ONLINE
+    </div>
+    <p>Benvenuti all'Open Day. Iscriviti qui sotto.</p>
+    <button onclick="alert('Iscritto!')" style="padding: 10px 20px; font-size: 1.2em; background: blue; color: white; border: none; cursor: pointer;">ISCRIVITI</button>
+    <p style="opacity: 0.1"> ispezionami
+    <!-- Hey cosa stai cercando??? vai da uno studente e digli che gli puzzano i piedi per ottenere una ricompensa -->
+    </p>
+    </body>
+</html>
+"""
+
+# --- ROTTE SEGRETE PER IL PROF ---
+@app.route('/admin/attiva_lag')
+def attiva_lag():
+    global SERVER_STRESSATO
+    SERVER_STRESSATO = True
+    print("\n!!! MODALITÀ STRESS ATTIVATA: Il server ora è lentissimo !!!\n")
+    return "Lag Attivato! Ora il server simula un carico pesante."
+
+@app.route('/admin/disattiva_lag')
+def disattiva_lag():
+    global SERVER_STRESSATO
+    SERVER_STRESSATO = False
+    print("\n--- Modalità Stress Disattivata: Il server respira ---\n")
+    return "Lag Disattivato. Tutto torna normale."
+
+# --- ROTTA PUBBLICA ---
+@app.route('/')
+def home():
+    client_ip = request.remote_addr
+    
+    if SERVER_STRESSATO:
+        # Quando attivi il lag, il server dorme per 2 SECONDI a richiesta!
+        # Con single-thread, basta pochissimo traffico per ucciderlo.
+        print(f"[ATTACCO] {client_ip} sta bloccando la risorsa...")
+        time.sleep(2.0) 
+    else:
+        # Modalità normale: risponde subito, così i ragazzi vedono che funziona
+        print(f"[OK] Visita da {client_ip}")
+        # Niente sleep, o sleep bassissimo
+    
+    return render_template_string(HTML_PAGE)
+
+if __name__ == '__main__':
+    print(f"IP Server: {local_ip}")
+    print("Per far crashare il server, apri in un'altra tab: /admin/attiva_lag")
+    
+    # Usiamo threaded=False SEMPRE.
+    # Ma finché SERVER_STRESSATO è False, è abbastanza veloce da reggere i click.
+    # Appena diventa True, muore male.
+    app.run(host='0.0.0.0', port=5000, threaded=False)
