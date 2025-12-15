@@ -1,6 +1,8 @@
 '''
 Sever creato con flask e con socket per la simulazione di attacco dos
 Il server gestisce tutto in single-threading così che l'attacco dos avvenga, altrimenti le architetture dei server standard gestirebbero tranquillamente tutte le richieste
+
+DUE VERSIONI 1° FUNZIONA BENE CON BOTNET RIDOTTA, 2° Anche in botnet grande, basta attivare la variabile globale lag 
 '''
 
 
@@ -93,7 +95,7 @@ if __name__=="__main__":
     print(f"Host: {hostname} \n INDIRIZZO IP: {local_ip}")
     app.run('0.0.0.0', threaded=False) # lo mettiamo visibile sulla LAN e impostiamo il threaded a FALSE -> che e FONDAMENTALE per rendere il server "stupido" :P
 '''
-
+# SECONDA VERSIONE 
 from flask import Flask, render_template_string, request
 import time
 import socket
@@ -118,14 +120,11 @@ HTML_PAGE = """
     </div>
     <p>Benvenuti all'Open Day. Iscriviti qui sotto.</p>
     <button onclick="alert('Iscritto!')" style="padding: 10px 20px; font-size: 1.2em; background: blue; color: white; border: none; cursor: pointer;">ISCRIVITI</button>
-    <p style="opacity: 0.1"> ispezionami
-    <!-- Hey cosa stai cercando??? vai da uno studente e digli che gli puzzano i piedi per ottenere una ricompensa -->
     </p>
     </body>
 </html>
 """
-
-# --- ROTTE SEGRETE PER IL PROF ---
+# rotta per attivare il lag
 @app.route('/admin/attiva_lag')
 def attiva_lag():
     global SERVER_STRESSATO
@@ -163,5 +162,5 @@ if __name__ == '__main__':
     
     # Usiamo threaded=False SEMPRE.
     # Ma finché SERVER_STRESSATO è False, è abbastanza veloce da reggere i click.
-    # Appena diventa True, muore male.
+    # Quando è true non gestisce più nulla e va in down
     app.run(host='0.0.0.0', port=5000, threaded=False)
