@@ -1,4 +1,4 @@
-1. Il Bignami dei Concetti (Da rileggere prima dell'Open Day)
+1. Il Bignami dei Concetti 
 
     Socket = Il Tubo (o il Telefono). È il collegamento fisico. Non sa cosa trasporta, sa solo che collega A con B. Noi usiamo questa per avere il controllo totale.
 
@@ -19,7 +19,7 @@
     Il server runna dove c'è flask, di base conviene ti costruisci un venv con le librerie 
     Mentre i client hanno bisogno solo di librerie standard e quindi basta che eseguano il file.
 
-    Metodo 1: La via "Hacker" (Consigliatissimo)
+    Metodo 1:
 
     Invece di far andare 20 ragazzini su GitHub, usa il tuo PC come File Server temporaneo. È velocissimo e molto educativo.
     Assicurati che il tuo PC e quelli del laboratorio siano sulla stessa rete Wi-Fi/LAN (lo sono per forza se devi fare l'attacco).
@@ -28,15 +28,15 @@
 
     Bash
         python -m http.server 8000  
-    Ora il tuo PC sta servendo i file della cartella sulla porta 8000.
+    Ora il tuo PC sta servendo i file della cartella sulla porta 8000. ( ma non possono scaricare direttamente ) 
 
 Cosa fanno i ragazzi:
     Aprono il browser (Chrome/Edge).
     Scrivono nella barra degli indirizzi il TUO IP seguito da :8000.
         Esempio: 192.168.1.15:8000
     Vedranno un elenco di file. Cliccano su attacco_studenti.py e lo scaricano.
-    Lo salvano sul Desktop e lo lanciano.
+    Lo salvano sul Desktop e lo lanciano. ( cartella condivisa ministage con ctrl+C / V prechè il serverino non fa scaricare direttamente) 
 Vantaggi:
     Non serve internet, basta la rete locale.
     Non devono digitare URL lunghi di GitHub.
-    Fa molto "condivisione pirata", i ragazzini impazziranno.
+    Fa molto "condivisione pirata"
